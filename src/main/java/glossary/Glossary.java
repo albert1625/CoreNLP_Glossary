@@ -78,6 +78,9 @@ public class Glossary {
                     potentialLinks.add(triple.objectLemmaGloss());
                 }
             }
+
+            potentialLinks.addAll(entry.getValue().getAdditions());
+
             entry.getValue().setPotentialLinksTo(potentialLinks);
             System.out.println("done: " + entry.getKey());
         }
