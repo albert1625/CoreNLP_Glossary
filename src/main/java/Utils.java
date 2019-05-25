@@ -28,6 +28,7 @@ public class Utils {
             if (line.startsWith("@")) {
                 term = line.substring(1);
                 glossaryItem = new GlossaryItem();
+                glossaryItem.setTerm(term);
             }
             else if (line.startsWith("Synonyms:") || line.startsWith("See Also:")){
                 List<String> additions = new ArrayList<>(
