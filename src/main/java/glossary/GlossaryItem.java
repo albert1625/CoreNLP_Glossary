@@ -7,8 +7,9 @@ public class GlossaryItem {
     private String term;
     private String definition;
     private List<String> additions = new ArrayList<>();
-    private Set<String> potentialLinks = new HashSet<>();
-    private Set<GlossaryItem> links = new HashSet<>();
+    private Set<String> potentialLinksTo = new HashSet<>();
+    private Set<GlossaryItem> linksTo = new HashSet<>();
+    private Set<GlossaryItem> linksFrom = new HashSet<>();
 
     public GlossaryItem() {
     }
@@ -37,20 +38,28 @@ public class GlossaryItem {
         this.additions = additions;
     }
 
-    public Set<String> getPotentialLinks() {
-        return potentialLinks;
+    public Set<String> getPotentialLinksTo() {
+        return potentialLinksTo;
     }
 
-    public void setPotentialLinks(Set<String> potentialLinks) {
-        this.potentialLinks = potentialLinks;
+    public void setPotentialLinksTo(Set<String> potentialLinksTo) {
+        this.potentialLinksTo = potentialLinksTo;
     }
 
-    public Set<GlossaryItem> getLinks() {
-        return links;
+    public Set<GlossaryItem> getLinksTo() {
+        return linksTo;
     }
 
-    public void setLinks(Set<GlossaryItem> links) {
-        this.links = links;
+    public void setLinksTo(Set<GlossaryItem> linksTo) {
+        this.linksTo = linksTo;
+    }
+
+    public Set<GlossaryItem> getLinksFrom() {
+        return linksFrom;
+    }
+
+    public void setLinksFrom(Set<GlossaryItem> linksFrom) {
+        this.linksFrom = linksFrom;
     }
 
     @Override
