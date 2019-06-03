@@ -125,16 +125,26 @@ public class Glossary {
 
     /**
      * creates separate DOT file for each term
+     * WARNING: deletes all previous .dot files in directory
      * @param directory
      */
     public void exportTermsToDOT(String directory) throws IOException {
-        File file = new File(directory);
-        if (!file.exists())
-            file.mkdir();
+        File folder = new File(directory);
+        if (!folder.exists())
+            folder.mkdir();
+        else{
+            List<File> fList = Arrays.asList(folder.listFiles());
+            for (File file : fList) {
+                if (file.getName().endsWith(".dot"))
+                    file.delete();
+            }
+        }
+
 
         for (Map.Entry<String, GlossaryItem> entry : this.getTerms().entrySet()) {
             String term = entry.getValue().getTerm();
-            String termCamelCase = CaseUtils.toCamelCase(term, false,  '/');
+            String termCamelCase =
+                    CaseUtils.toCamelCase(term, false,  '/', '(', ')', '-', '.');
             File outputFile =
                     new File(directory + "/" + termCamelCase + ".dot");
             BufferedWriter output = new BufferedWriter(new FileWriter(outputFile));
