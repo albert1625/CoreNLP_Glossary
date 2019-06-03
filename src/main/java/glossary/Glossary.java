@@ -10,8 +10,13 @@ import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.trees.TypedDependency;
 import edu.stanford.nlp.util.CoreMap;
+import org.apache.commons.text.CaseUtils;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Glossary {
@@ -102,6 +107,44 @@ public class Glossary {
             for (GlossaryItem lt : entry.getValue().getLinksTo()){
                 lt.getLinksFrom().add(entry.getValue());
             }
+        }
+    }
+
+    public void exportToDOT(String filename) throws IOException {
+        File outputFile = new File(filename);
+        BufferedWriter output = new BufferedWriter(new FileWriter(outputFile));
+        output.write("digraph Glossary {\r\n");
+        for (Map.Entry<String, GlossaryItem> entry : this.getTerms().entrySet()) {
+            for (GlossaryItem lt : entry.getValue().getLinksTo())
+                output.write("\"" + entry.getValue().getTerm() + "\" -> \"" + lt.getTerm() + "\";\r\n");
+            output.write("\r\n");
+        }
+        output.write("}");
+        output.close();
+    }
+
+    /**
+     * creates separate DOT file for each term
+     * @param directory
+     */
+    public void exportTermsToDOT(String directory) throws IOException {
+        File file = new File(directory);
+        if (!file.exists())
+            file.mkdir();
+
+        for (Map.Entry<String, GlossaryItem> entry : this.getTerms().entrySet()) {
+            String term = entry.getValue().getTerm();
+            String termCamelCase = CaseUtils.toCamelCase(term, false,  '/');
+            File outputFile =
+                    new File(directory + "/" + termCamelCase + ".dot");
+            BufferedWriter output = new BufferedWriter(new FileWriter(outputFile));
+            output.write("digraph " + termCamelCase + " {\r\n");
+            for (GlossaryItem lt : entry.getValue().getLinksTo())
+                output.write("\"" + term + "\" -> \"" + lt.getTerm() + "\";\r\n");
+            for (GlossaryItem lf : entry.getValue().getLinksFrom())
+                output.write("\"" + lf.getTerm() + "\" -> \"" + term + "\";\r\n");
+            output.write("}");
+            output.close();
         }
     }
 }
